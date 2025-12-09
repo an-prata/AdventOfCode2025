@@ -43,8 +43,8 @@ intersected (x, y) (x', y') coords = any insideOfRect coords || any (uncurry cro
     insideOfRect (x, y) = x < x2 && x > x1 && y < y2 && y > y1
 
     crossesRect (x, y) (x', y') = if y == y'
-        then xb >= x2 && xa <= x1 && y <= y2 && y >= y1
-        else yb >= y2 && ya <= y1 && x <= x2 && x >= x1
+        then xb >= x2 && xa <= x1 && y < y2 && y > y1
+        else yb >= y2 && ya <= y1 && x < x2 && x > x1
       where
         xa = x `min` x'
         xb = x `max` x'
