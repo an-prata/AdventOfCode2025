@@ -15,6 +15,9 @@ main = do
     let rect = find (\(a, b) -> (wrapped a b coords) && (not $ intersected a b coords)) pairs
     print $ uncurry area <$> rect
 
+-- | Whether for given rectangle, bounded by the two given coordinates, there exists, in the given
+-- 'List', a point above and to the left, above and to the right, below and to the left, as well as
+-- below and to right of the rectangle.
 wrapped :: (Int, Int) -> (Int, Int) -> [(Int, Int)] -> Bool
 wrapped (x, y) (x', y') coords
     = isJust (find isUpLeft coords)
@@ -32,6 +35,8 @@ wrapped (x, y) (x', y') coords
     isUpLeft    (x, y) = x <= x1 && y >= y2
     isDownLeft  (x, y) = x <= x1 && y <= y1
 
+-- | Whether the rectangle, bounded by the two given coordinates, is intersected by any of the
+-- coordinates in the given 'List'.
 intersected :: (Int, Int) -> (Int, Int) -> [(Int, Int)] -> Bool
 intersected (x, y) (x', y') coords = any insideOfRect coords || any (uncurry crossesRect) coordEdges
   where
@@ -55,11 +60,14 @@ intersected (x, y) (x', y') coords = any insideOfRect coords || any (uncurry cro
     edges (a:b:ps) = (a, b) : edges (b:ps)
     edges _ = []
 
+-- | The area of a rectangle bounded by two corners.
 area :: (Int, Int) -> (Int, Int) -> Int
 area (x, y) (x', y') = (abs (x' - x) + 1) * (abs (y' - y) + 1)
 
+-- | "Read" a coordinate.
 readCoord :: String -> (Int, Int)
 readCoord s = (read $ takeWhile (/= ',') s, read $ drop 1 $ dropWhile (/= ',') s)
 
+-- | Creates a new 'List' of every pair of items from the given 'List'
 pairsOf :: [a] -> [(a, a)]
 pairsOf xs = concat $ fmap (\x -> fmap (x,) xs) xs
